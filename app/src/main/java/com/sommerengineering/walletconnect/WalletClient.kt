@@ -48,10 +48,12 @@ fun initWalletConnect(
 
     ///////////// delegate
 
+    lateinit var _sessionProposal: Wallet.Model.SessionProposal
     val walletDelegate = object : WalletKit.WalletDelegate {
 
         override fun onSessionProposal(sessionProposal: Wallet.Model.SessionProposal, verifyContext: Wallet.Model.VerifyContext) {
             // Triggered when wallet receives the session proposal sent by a Dapp
+            _sessionProposal = sessionProposal
         }
 
 //        fun onSessionAuthenticate(sessionAuthenticate: Wallet.Model.SessionAuthenticate, verifyContext: Wallet.Model.VerifyContext) {
@@ -94,7 +96,8 @@ fun initWalletConnect(
     WalletKit.setWalletDelegate(walletDelegate)
     //////////////
 
-
+    // todo need to init or trigger wallet delegate to receive sessionProposal object
+    //  also need to confirm chain ID and other params for worldcoin
 
     // namespaces
     val namespaces = mapOf("eip155" to Wallet.Model.Namespace.Session(
@@ -130,12 +133,12 @@ fun initWalletConnect(
             "eip155:1:0x163f8C2467924be0ae7B5347228CABF260318753"))
     )
 
-    val sessionProposal: Wallet.Model.SessionProposal =  /* an object received by `fun onSessionProposal(sessionProposal: Wallet.Model.SessionProposal)` in `WalletKit.WalletDelegate` */
+//    val sessionProposal: Wallet.Model.SessionProposal =  /* an object received by `fun onSessionProposal(sessionProposal: Wallet.Model.SessionProposal)` in `WalletKit.WalletDelegate` */
     val sessionNamespaces = WalletKit.generateApprovedNamespaces(
-        sessionProposal,
+        _sessionProposal,
         namespaces)
 
-    val proposerPublicKey: String = /*Proposer publicKey from SessionProposal object*/
+    val proposerPublicKey: String = _sessionProposal.proposerPublicKey /*Proposer publicKey from SessionProposal object*/
 
     val approveParams: Wallet.Params.SessionApprove = Wallet.Params.SessionApprove(proposerPublicKey, namespaces)
     WalletKit.approveSession(approveParams) { error -> /*callback for error while approving a session*/ }
