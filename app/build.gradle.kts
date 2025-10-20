@@ -56,4 +56,7 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+    implementation("com.reown:android-core:release_version")
+    implementation("com.reown:walletkit:release_version")
 }
