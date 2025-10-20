@@ -10,6 +10,8 @@ android {
     namespace = "com.sommerengineering.walletconnect"
     compileSdk = 36
 
+    android.buildFeatures.buildConfig = true
+
     defaultConfig {
         applicationId = "com.sommerengineering.walletconnect"
         minSdk = 24
