@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -16,6 +18,18 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // import local.properties
+        val localProperties = project.rootProject.file("local.properties")
+        val properties = Properties()
+        properties.load(localProperties.inputStream())
+
+        // extract wallet connect project id
+        val walletConnectProjectId = properties.getProperty("walletConnectProjectId")
+        buildConfigField(
+            type = "String",
+            name = "walletConnectProjectId",
+            value = walletConnectProjectId)
     }
 
     buildTypes {
